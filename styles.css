@@ -12,8 +12,8 @@
         
       --dark-color: #212529;
 
-      --list-item-bg: #ef7d7d;
-      --list-item-hover-bg: #d46e6e;
+      --list-item-bg: #ffebeb;
+      --list-item-hover-bg: #f7bcbc;
       --social-icon-bg: #ffffff;
     
     }
@@ -224,9 +224,8 @@
         padding: 12px 24px;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 1050;
         opacity: 0;
-       transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     }
     
     .alert-notification.show {
