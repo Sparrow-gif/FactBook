@@ -1,4 +1,22 @@
 
+/******************************************************/
+ html {
+     font-size:14px;
+     scroll-behavior: smooth;
+ }
+  * {
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      user-select:none;
+  }
+body {
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      user-select:none;
+  }
+/****************************************************/
     .language-btn {
       position: fixed;
       top: 10px;
