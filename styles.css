@@ -10,7 +10,26 @@
       --light-color: #f8f9fa;
         
       --dark-color: #212529;
+
+      --list-item-bg: #f9e6ff;
+      --list-item-hover-bg: #efccff;
+      --social-icon-bg: #ffffff;
+        
     }
+
+   @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --sidebar-bg: #1f1f1f;
+                --header-bg: #6f3ba3;
+                --text-color: #f0f0f0;
+                --card-bg: linear-gradient(90deg, #6f3ba3, #562a86);
+                --card-text-color: #f0f0f0;
+                --list-item-bg: #2a2a2a;
+                --list-item-hover-bg: #3a3a3a;
+                --social-icon-bg: #333333;
+            }
+        }
  /*****************************************************/
     html {
       font-size: 14px;
@@ -30,7 +49,57 @@
        box-sizing:border-box;
        user-select:none;
     }
-/*******************************************************/  
+/*******************************************************/
+
+    /* Sticky header styles */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1020;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .sticky-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .sticky-header.hide {
+            transform: translateY(-100%);
+        }
+        
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+        
+       .list-group-item {
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            background: var(--list-item-bg);
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-group-item:hover {
+            background-color: var(--list-item-hover-bg);
+        }
+
+/***********************************************************/
     .language-btn {
       position: fixed;
       top: 20px;
