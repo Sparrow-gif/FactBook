@@ -64,8 +64,7 @@
         
         .sticky-header.scrolled {
             background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(3px);
         }
         
         .sticky-header.hide {
@@ -98,6 +97,32 @@
         .list-group-item:hover {
             background-color: var(--list-item-hover-bg);
         }
+
+   .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .follow { color : var(--text-color); }
+
+        .telegram { background: #0088cc; }
+        .whatsapp { background: #25d366; }
+        .instagram { background: linear-gradient(45deg, #fd5949, #d6249f, #285AEB); }
 
 /***********************************************************/
     .language-btn {
