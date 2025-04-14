@@ -6,20 +6,13 @@
       --light-color: #f8f9fa;
       --dark-color: #212529;
     }
-  /************************************************************/
-    html {
-       font-size:14px;
-       scroll-behavior: smooth;
-    }
-    * {
-     
-    }
+    
     body {
       background-color: #f5f7fa;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       scroll-behavior: smooth;
     }
- /****************************************************************/   
+    
     .language-btn {
       position: fixed;
       top: 20px;
@@ -49,7 +42,10 @@
       flex-direction: column;
     }
     
-   /******************************************************/
+    .feed-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
     
     .card-body {
       padding: 24px;
@@ -103,7 +99,7 @@
     .btn-share:hover {
       background-color: var(--secondary-color);
     }
-  /*****************************************************************/  
+    
     .alert-notification {
       position: fixed;
       bottom: 20px;
@@ -122,7 +118,7 @@
     .alert-notification.show {
       opacity: 1;
     }
- /******************************************************/   
+    
     .skeleton {
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
       background-size: 200% 100%;
