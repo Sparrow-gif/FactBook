@@ -129,11 +129,14 @@
 
 /***********************************************************/
     .language-btn {
-      z-index: 1000;
-      background-color: var(--primary-color);
-      border: none;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      display:block;
+         display:block;
+         width:100%;
+         border: none;
+         padding: 15px;
+         font-size: 1rem;
+         background: var(--list-item-bg);
+         margin-bottom: 10px;
+         border-radius: 10px;
     }
 /***********************************/ 
     .feed-container {
