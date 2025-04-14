@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-language Feed (Dynamic)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .language-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+    .lang {
+      display: none;
+    }
+    .lang.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 150px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    /* Feed box styles */
+    .feed-card {
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      max-width: 660px;
+      margin: 0 auto 20px;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Alternate styles using :nth-child */
+    .feed-card:nth-child(even) {
+      background: linear-gradient(135deg, #fff9e6 0%, #ffecb3 100%);
+      border: 1px solid #ffe082;
+    }
+
+    .feed-card:nth-child(odd) {
+      background: linear-gradient(135deg, #e6f9ff 0%, #b3ebff 100%);
+      border: 1px solid #80deea;
+    }
+    
+    .feed-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .action-buttons {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    
+    .feed-card:hover .action-buttons {
+      opacity: 1;
+    }
+    
+    .action-buttons .btn {
+      margin-left: 5px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .language-flag {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container text-center py-4">
+    <h1 class="display-5">Multi-language Feed</h1>
+  </div>
+</header>
+
+<main class="container py-4">
+  <button class="btn btn-primary language-btn" onclick="toggleLanguageModal()">
+    <i class="bi bi-translate"></i> Change Language
+  </button>
+  
+  <section id="feed-container">
+    <!-- Feed cards will be inserted here by JavaScript -->
+  </section>
+</main>
+
+<!-- Modal for language selection -->
+<div class="modal fade" id="langModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Select Language</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body py-4">
+        <button class="btn btn-outline-primary m-2" onclick="switchLang('en')">
+          <img src="https://flagcdn.com/w20/gb.png" class="language-flag"> English
+        </button>
+        <button class="btn btn-outline-success m-2" onclick="switchLang('hi')">
+          <img src="https://flagcdn.com/w20/in.png" class="language-flag"> Hindi
+        </button>
+        <button class="btn btn-outline-warning m-2" onclick="switchLang('bn')">
+          <img src="https://flagcdn.com/w20/bd.png" class="language-flag"> Bengali
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Feed data
+  const feedData = [
+    {
+      en: "Good Morning! Have a wonderful day ahead.",
+      hi: "सुप्रभात! आपका दिन शुभ हो।",
+      bn: "সুপ্রভাত! আপনার দিনটি ভালো কাটুক।"
+    },
+    {
+      en: "How are you today? Hope you're doing well.",
+      hi: "आप आज कैसे हैं? आशा है आप ठीक होंगे।",
+      bn: "আপনি কেমন আছেন আজ? আশা করি আপনি ভালো আছেন।"
+    },
+    {
+      en: "Check out this new update. We've added exciting features!",
+      hi: "यह नया अपडेट देखें। हमने रोमांचक सुविधाएँ जोड़ी हैं!",
+      bn: "এই নতুন আপডেটটি দেখুন। আমরা উত্তেজনাপূর্ণ বৈশিষ্ট্য যোগ করেছি!"
+    },
+    {
+      en: "The weather is beautiful today. Perfect for a walk!",
+      hi: "आज मौसम बहुत सुंदर है। टहलने के लिए बिल्कुल सही!",
+      bn: "আজ আবহাওয়া খুব সুন্দর। হাঁটার জন্য একদম উপযুক্ত!"
+    },
+    {
+      en: "Learning new things keeps your mind sharp and active.",
+      hi: "नई चीजें सीखने से आपका दिमाग तेज और सक्रिय रहता है।",
+      bn: "নতুন জিনিস শেখা আপনার মস্তিষ্ককে তীক্ষ্ণ এবং সক্রিয় রাখে।"
+    }
+  ];
+
+  const feedContainer = document.getElementById('feed-container');
+  let currentLang = localStorage.getItem('preferredLang') || 'en';
+
+  // Create feed items dynamically
+  function renderFeed() {
+    feedContainer.innerHTML = ''; // Clear previous
+    
+    feedData.forEach((item, index) => {
+      const article = document.createElement('article');
+      article.className = 'feed-card';
+      article.id = `feed-item-${index}`;
+      
+      const cardBody = document.createElement('div');
+      cardBody.className = 'card-body position-relative p-4';
+      
+      // Add language content divs
+      ['en', 'hi', 'bn'].forEach(lang => {
+        const div = document.createElement('div');
+        div.className = `lang lang-${lang}`;
+        div.innerText = item[lang];
+        if (lang === currentLang) div.classList.add('active');
+        cardBody.appendChild(div);
+      });
+      
+      // Add action buttons
+      const actionDiv = document.createElement('div');
+      actionDiv.className = 'action-buttons';
+      
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn btn-sm btn-secondary';
+      copyBtn.title = 'Copy text';
+      copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
+      copyBtn.onclick = () => copyToClipboard(item[currentLang]);
+      
+      const whatsappBtn = document.createElement('button');
+      whatsappBtn.className = 'btn btn-sm btn-success';
+      whatsappBtn.title = 'Share on WhatsApp';
+      whatsappBtn.innerHTML = '<i class="bi bi-whatsapp"></i>';
+      whatsappBtn.onclick = () => shareOnWhatsApp(item[currentLang]);
+      
+      actionDiv.appendChild(copyBtn);
+      actionDiv.appendChild(whatsappBtn);
+      cardBody.appendChild(actionDiv);
+      
+      article.appendChild(cardBody);
+      feedContainer.appendChild(article);
+    });
+  }
+
+  function toggleLanguageModal() {
+    new bootstrap.Modal(document.getElementById('langModal')).show();
+  }
+
+  function switchLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('preferredLang', lang);
+
+    document.querySelectorAll('.lang').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll(`.lang-${lang}`).forEach(el => el.classList.add('active'));
+    
+    bootstrap.Modal.getInstance(document.getElementById('langModal')).hide();
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+
+  function shareOnWhatsApp(text) {
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    renderFeed();
+    switchLang(currentLang); // Apply saved lang on page load
+  });
+</script>
+
+</body>
+</html>
