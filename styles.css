@@ -1,0 +1,77 @@
+
+    .language-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+    .lang {
+      display: none;
+    }
+    .lang.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 150px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    /* Feed box styles */
+    .feed-card {
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.3s;
+      max-width: 660px;
+      margin: 0 auto 20px;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Alternate styles using :nth-child */
+    .feed-card:nth-child(even) {
+      background: linear-gradient(135deg, #fff9e6 0%, #ffecb3 100%);
+      border: 1px solid #ffe082;
+    }
+
+    .feed-card:nth-child(odd) {
+      background: linear-gradient(135deg, #e6f9ff 0%, #b3ebff 100%);
+      border: 1px solid #80deea;
+    }
+    
+    .feed-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .action-buttons {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    
+    .feed-card:hover .action-buttons {
+      opacity: 1;
+    }
+    
+    .action-buttons .btn {
+      margin-left: 5px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .language-flag {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    }
+  
