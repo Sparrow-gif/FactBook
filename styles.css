@@ -55,6 +55,8 @@
   *::-webkit-scrollbar {
            display: none; /* Chrome, Safari, and Opera */
          }
+/****************************************************/
+  h1 { font-size: 18px;}
 /*******************************************************/
 
     /* Sticky header styles */
