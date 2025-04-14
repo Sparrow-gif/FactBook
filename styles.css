@@ -1,86 +1,160 @@
 
-/******************************************************/
- html {
-     font-size:14px;
-     scroll-behavior: smooth;
- }
-  * {
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      user-select:none;
-  }
-body {
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      user-select:none;
-  }
-/****************************************************/
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4895ef;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+    }
+  /************************************************************/
+    html {
+       font-size:14px;
+       scroll-behavior: smooth;
+    }
+    * {
+     
+    }
+    body {
+      background-color: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      scroll-behavior: smooth;
+    }
+ /****************************************************************/   
     .language-btn {
       position: fixed;
-      top: 10px;
-      right: 10px;
+      top: 20px;
+      right: 20px;
       z-index: 1000;
+      background-color: var(--primary-color);
+      border: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
+    
+    .feed-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .feed-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+   /******************************************************/
+    
+    .card-body {
+      padding: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
     .lang {
       display: none;
+      flex-grow: 1;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--dark-color);
     }
+    
     .lang.active {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 150px;
-      text-align: center;
-      font-size: 1.2rem;
+      animation: fadeIn 0.5s ease;
     }
-
-    /* Feed box styles */
-    .feed-card {
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: 0.3s;
-      max-width: 660px;
-      margin: 0 auto 20px;
-      min-height: 220px;
-      position: relative;
-      overflow: hidden;
+    
+    .action-divider {
+      border-top: 1px solid rgba(0,0,0,0.1);
+      margin: 16px 0;
     }
-
-    /* Alternate styles using :nth-child --
-    .feed-card:nth-child(even) {
-      background: linear-gradient(135deg, #fff9e6 0%, #ffecb3 100%);
-      border: 1px solid #ffe082;
-    }
-
-    .feed-card:nth-child(odd) {
-      background: linear-gradient(135deg, #e6f9ff 0%, #b3ebff 100%);
-      border: 1px solid #80deea;
-    } */
     
     .action-buttons {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      opacity: 0.7;
-      transition: opacity 0.3s;
+      display: flex;
+      justify-content: space-between;
     }
     
-    .action-buttons .btn {
-      margin-left: 5px;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-copy {
+      background-color: var(--light-color);
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+    }
+    
+    .btn-share {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-copy:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-share:hover {
+      background-color: var(--secondary-color);
+    }
+  /*****************************************************************/  
+    .alert-notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--dark-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1050;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .alert-notification.show {
+      opacity: 1;
+    }
+ /******************************************************/   
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+      border-radius: 4px;
+    }
+    
+    .skeleton-text {
+      height: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
     .language-flag {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       margin-right: 8px;
       border-radius: 50%;
-      box-shadow: 0 0 3px rgba(0,0,0,0.2);
+      object-fit: cover;
+    }
+    
+    .modal-header {
+      background-color: var(--primary-color);
+      color: white;
     }
   
