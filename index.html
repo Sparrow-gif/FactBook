@@ -11,155 +11,198 @@
   
 </head>
 <body>
+  <div id="app">
+    <header class="py-4 text-center">
+      <h1 class="display-5 fw-bold text-primary">Global Feed</h1>
+      <p class="text-muted">Content in multiple languages</p>
+    </header>
 
-<header>
-  
-</header>
-
-<main class="container py-4">
-  <button class="btn btn-primary language-btn" onclick="toggleLanguageModal()">
-    <i class="bi bi-translate"></i> Change Language
-  </button>
-  
-  <section id="feed-container">
-    <!-- Feed cards will be inserted here by JavaScript -->
-  </section>
-</main>
-
-<!-- Modal for language selection -->
-<div class="modal fade" id="langModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Select Language</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <main class="feed-container">
+      <button class="btn btn-primary language-btn rounded-pill px-3" @click="toggleLanguageModal">
+        <i class="bi bi-translate me-1"></i> {{ currentLanguageName }}
+      </button>
+      
+      <div v-if="loading" class="feed-cards">
+        <div v-for="n in 3" :key="'skeleton-'+n" class="feed-card">
+          <div class="card-body">
+            <div class="skeleton skeleton-text" style="width: 80%;"></div>
+            <div class="skeleton skeleton-text" style="width: 90%;"></div>
+            <div class="skeleton skeleton-text" style="width: 70%;"></div>
+            <div class="action-divider"></div>
+            <div class="action-buttons">
+              <div class="skeleton" style="width: 100px; height: 36px;"></div>
+              <div class="skeleton" style="width: 100px; height: 36px;"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body py-4">
-        <button class="btn btn-outline-primary m-2" onclick="switchLang('en')">  English  </button>
-        <button class="btn btn-outline-success m-2" onclick="switchLang('hi')"> Hindi </button>
-        <button class="btn btn-outline-warning m-2" onclick="switchLang('bn')"> Bengali </button>
+      
+      <div v-else class="feed-cards">
+        <article v-for="(item, index) in feedData" :key="index" class="feed-card">
+          <div class="card-body">
+            <div v-for="lang in languages" :key="lang.code" 
+                 :class="['lang', 'lang-'+lang.code, { active: currentLang === lang.code }]">
+              {{ item[lang.code] }}
+            </div>
+            
+            <div class="action-divider"></div>
+            <div class="action-buttons">
+              <button class="btn btn-copy rounded-pill px-3" @click="copyToClipboard(item[currentLang])">
+                <i class="bi bi-clipboard me-1"></i> Copy
+              </button>
+              <button class="btn btn-share rounded-pill px-3" @click="shareOnWhatsApp(item[currentLang])">
+                <i class="bi bi-whatsapp me-1"></i> Share
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Language Selection Modal -->
+    <div class="modal fade" id="langModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Select Language</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body py-4">
+            <div class="d-grid gap-2">
+              <button v-for="lang in languages" :key="lang.code" 
+                      class="btn btn-outline-primary text-start py-2" 
+                      @click="switchLang(lang.code)">
+                <img :src="lang.flag" class="language-flag"> {{ lang.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Custom Alert Notification -->
+    <div class="alert-notification" :class="{ show: showAlert }">
+      <i class="bi bi-check-circle-fill me-2"></i> {{ alertMessage }}
+    </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="version-check.js"></script> 
-<script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.min.js"></script>
-  
-
-<script>
-  // Feed data
-  const feedData = [
-    {
-      en: "Good Morning! Have a wonderful day ahead.",
-      hi: "सुप्रभात! आपका दिन शुभ हो।",
-      bn: "সুপ্রভাত! আপনার দিনটি ভালো কাটুক।"
-    },
-    {
-      en: "How are you today? Hope you're doing well.",
-      hi: "आप आज कैसे हैं? आशा है आप ठीक होंगे।",
-      bn: "আপনি কেমন আছেন আজ? আশা করি আপনি ভালো আছেন।"
-    },
-    {
-      en: "Check out this new update. We've added exciting features!",
-      hi: "यह नया अपडेट देखें। हमने रोमांचक सुविधाएँ जोड़ी हैं!",
-      bn: "এই নতুন আপডেটটি দেখুন। আমরা উত্তেজনাপূর্ণ বৈশিষ্ট্য যোগ করেছি!"
-    },
-    {
-      en: "The weather is beautiful today. Perfect for a walk!",
-      hi: "आज मौसम बहुत सुंदर है। टहलने के लिए बिल्कुल सही!",
-      bn: "আজ আবহাওয়া খুব সুন্দর। হাঁটার জন্য একদম উপযুক্ত!"
-    },
-    {
-      en: "Learning new things keeps your mind sharp and active.",
-      hi: "नई चीजें सीखने से आपका दिमाग तेज और सक्रिय रहता है।",
-      bn: "নতুন জিনিস শেখা আপনার মস্তিষ্ককে তীক্ষ্ণ এবং সক্রিয় রাখে।"
-    }
-  ];
-
-  const feedContainer = document.getElementById('feed-container');
-  let currentLang = localStorage.getItem('preferredLang') || 'en';
-
-  // Create feed items dynamically
-  function renderFeed() {
-    feedContainer.innerHTML = ''; // Clear previous
+  <script>
+    const { createApp, ref, onMounted } = Vue;
     
-    feedData.forEach((item, index) => {
-      const article = document.createElement('article');
-      article.className = 'feed-card';
-      article.id = `feed-item-${index}`;
-      
-      const cardBody = document.createElement('div');
-      cardBody.className = 'card-body position-relative p-4';
-      
-      // Add language content divs
-      ['en', 'hi', 'bn'].forEach(lang => {
-        const div = document.createElement('div');
-        div.className = `lang lang-${lang}`;
-        div.innerText = item[lang];
-        if (lang === currentLang) div.classList.add('active');
-        cardBody.appendChild(div);
-      });
-      
-      // Add action buttons
-      const actionDiv = document.createElement('div');
-      actionDiv.className = 'action-buttons';
-      
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'btn btn-sm btn-secondary';
-      copyBtn.title = 'Copy text';
-      copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
-      copyBtn.onclick = () => copyToClipboard(item[currentLang]);
-      
-      const whatsappBtn = document.createElement('button');
-      whatsappBtn.className = 'btn btn-sm btn-success';
-      whatsappBtn.title = 'Share on WhatsApp';
-      whatsappBtn.innerHTML = '<i class="bi bi-whatsapp"></i>';
-      whatsappBtn.onclick = () => shareOnWhatsApp(item[currentLang]);
-      
-      actionDiv.appendChild(copyBtn);
-      actionDiv.appendChild(whatsappBtn);
-      cardBody.appendChild(actionDiv);
-      
-      article.appendChild(cardBody);
-      feedContainer.appendChild(article);
-    });
-  }
-
-  function toggleLanguageModal() {
-    new bootstrap.Modal(document.getElementById('langModal')).show();
-  }
-
-  function switchLang(lang) {
-    currentLang = lang;
-    localStorage.setItem('preferredLang', lang);
-
-    document.querySelectorAll('.lang').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll(`.lang-${lang}`).forEach(el => el.classList.add('active'));
-    
-    bootstrap.Modal.getInstance(document.getElementById('langModal')).hide();
-  }
-
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Copied to clipboard!');
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-    });
-  }
-
-  function shareOnWhatsApp(text) {
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  }
-
-  // Initial load
-  document.addEventListener('DOMContentLoaded', () => {
-    renderFeed();
-    switchLang(currentLang); // Apply saved lang on page load
-  });
-</script>
-
+    createApp({
+      setup() {
+        // Simulated database
+        const simulatedDB = [
+          {
+            en: "Good Morning! Have a wonderful day ahead.",
+            hi: "सुप्रभात! आपका दिन शुभ हो।",
+            bn: "সুপ্রভাত! আপনার দিনটি ভালো কাটুক।"
+          },
+          {
+            en: "How are you today? Hope you're doing well.",
+            hi: "आप आज कैसे हैं? आशा है आप ठीक होंगे।",
+            bn: "আপনি কেমন আছেন আজ? আশা করি আপনি ভালো আছেন।"
+          },
+          {
+            en: "Check out this new update. We've added exciting features!",
+            hi: "यह नया अपडेट देखें। हमने रोमांचक सुविधाएँ जोड़ी हैं!",
+            bn: "এই নতুন আপডেটটি দেখুন। আমরা উত্তেজনাপূর্ণ বৈশিষ্ট্য যোগ করেছি!"
+          },
+          {
+            en: "The weather is beautiful today. Perfect for a walk!",
+            hi: "आज मौसम बहुत सुंदर है। टहलने के लिए बिल्कुल सही!",
+            bn: "আজ আবহাওয়া খুব সুন্দর। হাঁটার জন্য একদম উপযুক্ত!"
+          },
+          {
+            en: "Learning new things keeps your mind sharp and active.",
+            hi: "नई चीजें सीखने से आपका दिमाग तेज और सक्रिय रहता है।",
+            bn: "নতুন জিনিস শেখা আপনার মস্তিষ্ককে তীক্ষ্ণ এবং সক্রিয় রাখে।"
+          }
+        ];
+        
+        const languages = [
+          { code: 'en', name: 'English', flag: 'https://flagcdn.com/w20/gb.png' },
+          { code: 'hi', name: 'Hindi', flag: 'https://flagcdn.com/w20/in.png' },
+          { code: 'bn', name: 'Bengali', flag: 'https://flagcdn.com/w20/bd.png' }
+        ];
+        
+        const currentLang = ref(localStorage.getItem('preferredLang') || 'en');
+        const feedData = ref([]);
+        const loading = ref(true);
+        const showAlert = ref(false);
+        const alertMessage = ref('');
+        
+        const currentLanguageName = ref(
+          languages.find(lang => lang.code === currentLang.value)?.name || 'English'
+        );
+        
+        // Simulate fetching from database
+        const fetchFeedData = () => {
+          loading.value = true;
+          
+          // Simulate API delay
+          setTimeout(() => {
+            feedData.value = simulatedDB;
+            loading.value = false;
+          }, 1500);
+        };
+        
+        const toggleLanguageModal = () => {
+          const modal = new bootstrap.Modal(document.getElementById('langModal'));
+          modal.show();
+        };
+        
+        const switchLang = (lang) => {
+          currentLang.value = lang;
+          localStorage.setItem('preferredLang', lang);
+          currentLanguageName.value = languages.find(l => l.code === lang)?.name || 'English';
+          
+          const modal = bootstrap.Modal.getInstance(document.getElementById('langModal'));
+          if (modal) modal.hide();
+        };
+        
+        const copyToClipboard = (text) => {
+          navigator.clipboard.writeText(text).then(() => {
+            showNotification('Copied to clipboard!');
+          }).catch(err => {
+            console.error('Failed to copy: ', err);
+            showNotification('Failed to copy');
+          });
+        };
+        
+        const shareOnWhatsApp = (text) => {
+          const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+          window.open(url, '_blank');
+        };
+        
+        const showNotification = (message) => {
+          alertMessage.value = message;
+          showAlert.value = true;
+          
+          setTimeout(() => {
+            showAlert.value = false;
+          }, 3000);
+        };
+        
+        onMounted(() => {
+          fetchFeedData();
+        });
+        
+        return {
+          languages,
+          currentLang,
+          currentLanguageName,
+          feedData,
+          loading,
+          showAlert,
+          alertMessage,
+          toggleLanguageModal,
+          switchLang,
+          copyToClipboard,
+          shareOnWhatsApp
+        };
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
