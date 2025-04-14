@@ -12,8 +12,8 @@
         
       --dark-color: #212529;
 
-      --list-item-bg: #d6deff;
-      --list-item-hover-bg: #b6c2fc;
+      --list-item-bg: #ef7d7d;
+      --list-item-hover-bg: #d46e6e;
       --social-icon-bg: #ffffff;
     
     }
@@ -220,7 +220,7 @@
         left: 50%;
         transform: translate(-50%, 50%);
         background-color: var(--dark-color);
-        color: var(--text-color);
+        color: #ffffff;
         padding: 12px 24px;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
