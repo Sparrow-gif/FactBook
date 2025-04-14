@@ -61,6 +61,11 @@
                 </li>
             </ul>
 
+            <!-- Language Select Button -->
+            <button class="btn btn-primary language-btn rounded-pill px-3" @click="toggleLanguageModal">
+                <i class="bi bi-translate me-1"></i> {{ currentLanguageName }}
+           </button>
+
             <!-- Follow Us Section -->
             <div class="text-center mt-4">
                 <h6 class="follow"> Follow Us On </h6>
@@ -79,9 +84,6 @@
      ------------------------------------------------------------------->
 
     <main class="feed-container">
-      <button class="btn btn-primary language-btn rounded-pill px-3" @click="toggleLanguageModal">
-        <i class="bi bi-translate me-1"></i> {{ currentLanguageName }}
-      </button>
       
       <div v-if="loading" class="feed-cards">
         <div v-for="n in 3" :key="'skeleton-'+n" class="feed-card">
