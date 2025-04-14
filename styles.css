@@ -211,22 +211,24 @@
     }
  /*************************************************/   
     .alert-notification {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--dark-color);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      z-index: 1050;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+        position: fixed;
+        z-index: 99999;
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, 50%);
+        background-color: var(--dark-color);
+        color: var(--text-color);
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1050;
+        opacity: 0;
+       transition: opacity 0.3s ease;
     }
     
     .alert-notification.show {
       opacity: 1;
+      transform: translate(-50%, 0%);
     }
 /*************************************************/    
     .skeleton {
